@@ -1,0 +1,25 @@
+schema_version: 0.1
+provenance: retained-by-owner
+extracted: '2026-10-16'
+paths:
+  - .github/workflows/ci.yml
+  - .gitignore
+  - AGENTS.md
+  - README.md
+  - form-manifest.yaml
+  - package.json
+  - package-lock.json
+  - tsconfig.json
+  - src/contracts.ts
+  - src/cron-matcher.ts
+  - src/index.ts
+  - src/run-store.ts
+  - src/scheduler.ts
+  - src/types.ts
+  - migrations/0001_initial.sql
+  - migrations/0002_isolated_runs.sql
+  - migrations/0003_admission_provenance.sql
+  - migrations/0004_pending_target_order.sql
+  - test/contracts.test.mjs
+  - test/fixtures.mjs
+  - test/run-store.test.mjs
