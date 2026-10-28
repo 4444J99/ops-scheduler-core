@@ -37,7 +37,7 @@ export function validateTargets(targets: readonly RegisteredTarget[]): void {
   for (const t of targets) {
     const o=t.ownership;
     parseCron(t.schedule); if(t.continuationSchedule)parseCron(t.continuationSchedule);
-    if (!NAME.test(t.name) || !/^[A-Z][A-Z0-9_]*$/.test(t.binding) || names.has(t.name) || bindings.has(t.binding)) throw new Error('duplicate_or_invalid_target');
+    if (typeof t.active !== 'boolean' || !NAME.test(t.name) || !/^[A-Z][A-Z0-9_]*$/.test(t.binding) || names.has(t.name) || bindings.has(t.binding)) throw new Error('duplicate_or_invalid_target');
     if (!o || !positive(o.repositoryId) || !REPO.test(o.repository) || !NAME.test(o.service) || !NAME.test(o.accountRef) || !['production','staging'].includes(o.environment)) throw new Error('invalid_owner');
     if (o.contractVersion!==1 || !['named-entrypoint','legacy-default'].includes(o.authorization) || !/^[A-Za-z][A-Za-z0-9_]*$/.test(o.capability)) throw new Error('invalid_capability');
     if (o.authorization==='named-entrypoint' && o.capability==='default') throw new Error('named_capability_required');
@@ -61,7 +61,7 @@ export function validateNewRegistration(t:RegisteredTarget):void {
 }
 export function assertController(t:RegisteredTarget, environment:unknown):void {
   if (environment!=='production' && environment!=='staging') throw new Error('controller_disabled');
-  if (environment==='staging' && t.ownership.environment!=='staging') throw new Error('environment_crossing_refused');
+  if (environment!==t.ownership.environment) throw new Error('environment_crossing_refused');
 }
 export function validateAllocation(targets:readonly RegisteredTarget[], allowance:Cost, overhead:Cost, reservePercent=20):void {
   validateTargets(targets); validateCost(allowance); validateCost(overhead);

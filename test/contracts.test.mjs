@@ -29,6 +29,14 @@ test('admission refuses unknown owners, duplicate bindings and shared resource o
   const b = target('beta', 2); b.ownership.service = a.ownership.service;
   assert.throws(() => validateTargets([a, b]), /conflicting_resource_owner/);
 });
+test('admission rejects non-boolean active values and accepts boolean active values', () => {
+  const a = target();
+  validateTargets([{ ...a, active: true }]);
+  validateTargets([{ ...a, active: false }]);
+  for (const active of ['false', 'true', 0, 1, null, undefined, {}]) {
+    assert.throws(() => validateTargets([{ ...a, active }]), /duplicate_or_invalid_target/);
+  }
+});
 test('new registrations require isolated measured authority', () => {
   const a = target(); a.ownership.authorization = 'legacy-default';
   assert.throws(() => validateNewRegistration(a), /isolated_measured/);
@@ -43,10 +51,14 @@ test('allocation requires supplied allowance and retains reserve', () => {
   a.ownership.resourceBudget.perDay.requests = 80;
   validateAllocation([a], allowance, zeroCost());
 });
-test('controller cannot cross staging into production or run unidentified', () => {
-  const a = target(); a.ownership.environment = 'production';
-  for (const env of ['staging', 'disabled', undefined]) assert.throws(() => assertController(a, env));
-  assertController(a, 'production');
+test('controller cannot cross environment boundaries or run unidentified', () => {
+  const prodTarget = target(); prodTarget.ownership.environment = 'production';
+  for (const env of ['staging', 'disabled', undefined]) assert.throws(() => assertController(prodTarget, env));
+  assertController(prodTarget, 'production');
+
+  const stagingTarget = target(); stagingTarget.ownership.environment = 'staging';
+  for (const env of ['production', 'disabled', undefined]) assert.throws(() => assertController(stagingTarget, env));
+  assertController(stagingTarget, 'staging');
 });
 test('logical keys fence environments and modes without binding source or retry', () => {
   const a = target(), key = logicalRunKey(a, NOW, 'scheduled');
