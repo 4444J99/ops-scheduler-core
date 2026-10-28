@@ -26,7 +26,7 @@ network, credentials, Cloudflare account, local listener, or private repository 
 `validateNewRegistration(target)` requires a named capability and measured resource budget.
 `validateAllocation(targets, allowance, overhead, reservePercent)` checks caller-supplied
 capacity; the library does not embed a provider plan or treat a quota as permission to spend.
-`assertController(target, environment)` rejects unidentified controllers and staging-to-production
+`assertController(target, environment)` rejects unidentified controllers and environment-crossing
 invocation. These checks do not grant provider authority.
 
 `getDueTargets(targets, scheduledTime)` returns due payloads from an explicit target list.
