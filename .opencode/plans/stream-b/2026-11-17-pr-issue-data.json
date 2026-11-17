@@ -1,0 +1,22 @@
+{
+ "repo": "ops-scheduler-core",
+ "slug": "4444J99/ops-scheduler-core",
+ "archived_upstream": false,
+ "prs": {
+  "prs_total": 1,
+  "prs_merged": 0,
+  "prs_open": 0,
+  "prs_closed_unmerged": 1
+ },
+ "closed_classes": {
+  "producer_retired": 1
+ },
+ "supersession_links": [],
+ "open_pr_actions": [],
+ "issues": {
+  "total": 1,
+  "open": 1,
+  "stale": 0
+ },
+ "generated": "2026-11-17"
+}
